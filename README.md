@@ -1,5 +1,5 @@
-# Langchain Text Splitter
-This is a Python application that allows you to split and analyze text files using different methods, including character-based splitting, recursive character-based splitting, and token splitting using OpenAI's CL100K_BASE encoding scheme. It is designed to work with various programming languages and file formats.
+# 🦜️✂️ Langchain Text Splitter
+This is a Python application that allows you to split and analyze text files using different methods, including character-based splitting, recursive character-based splitting, and token splitting. It is designed to work with various programming languages and txt.
 
 ## Features
 - **File Upload**: You can upload a text file of your choice.
@@ -41,7 +41,7 @@ To run this application, make sure you have Python installed on your system. The
 3.  Run the project usign `streamlit run chunkerizer.py`
 
 ## Author
-This application was created by [Gustavo Espíndola](https://github.com/gustavoespindola). If you have any questions or feedback, please contact in our [CodeGPT Discord](https://discord.gg/mZf5aaYt) .
+This application was created by [Gustavo Espíndola](https://github.com/gustavoespindola). If you have any questions, feedback or requests, please contact in our [Discord](https://discord.gg/mZf5aaYt) .
 
 ## License
 This project is licensed under the MIT License.
