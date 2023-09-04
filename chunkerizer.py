@@ -77,11 +77,12 @@ def file_upload():
     return uploaded_file.getvalue().decode("utf-8")
 
 # Create Top KPI's
-def metrics(chunks, tokens):
-  col1, col2 = st.columns(2)
+def metrics(chunks, tokens, characters):
+  col1, col2, col3 = st.columns(3)
   col1.metric("Chunks", chunks)
   token_ratio=round(tokens/st.session_state['tokenized_content'], 2)
-  col2.metric("Tokens", tokens, token_ratio, delta_color="inverse" if token_ratio!=1 else "off")
+  col2.metric("Total Tokens", tokens, token_ratio, delta_color="inverse" if token_ratio!=1 else "off")
+  col3.metric("Total Characters", characters)
 
 # Create dataframe table
 def create_dataframe(text_splitter, file_content):
@@ -94,16 +95,34 @@ def create_dataframe(text_splitter, file_content):
       "Characters": [len(chunk.page_content) for chunk in chunks],
     }
   )
-  metrics(len(df), df['Tokens'].sum())
+  metrics(len(df), df['Tokens'].sum(), df['Characters'].sum())
   if len(df) < 1:
     st.error('No content found.')
   else:
     st.dataframe(df, use_container_width=True)
+
+
+#
+#
+# MAIN
+st.set_page_config(
+  page_title="Chunkerizer",
+  page_icon="✂️",
+  layout="wide",
+  initial_sidebar_state="expanded",
+  menu_items={
+      'Get Help': 'https://www.extremelycoolapp.com/help',
+      'Report a bug': "https://www.extremelycoolapp.com/bug",
+      'About': "# This is a header. This is an *extremely* cool app!"
+  }
+)
+st.title("🦜️ Chunkerizer")
+st.markdown("""#### Using [@langchain](https://python.langchain.com/docs/modules/data_connection/document_transformers/) text splitter to chunk code and text files.""")
+st.divider()
+
+#
 #
 # SIDEBAR
-st.sidebar.title("Chunkerize")
-st.sidebar.markdown("Using [@langchain](https://python.langchain.com/docs/modules/data_connection/document_transformers/) text splitter to chunk code and text files.")
-st.sidebar.divider()
 uploaded_file=st.sidebar.file_uploader(
   "Drop a file here or click to upload",
   type=[file["extension"] for file in files_types],
@@ -144,7 +163,7 @@ if uploaded_file is not None:
         "Characters": [len(chunk.page_content) for chunk in chunks],
       }
     )
-    metrics(len(df), df['Tokens'].sum())
+    metrics(len(df), df['Tokens'].sum(), df['Characters'].sum())
     st.dataframe(df, use_container_width=True)
 
 
@@ -181,3 +200,6 @@ if uploaded_file is not None:
 
   with st.expander(f"View Original File {uploaded_file.name} – {st.session_state['file_language']}"):
     st.code(file_content, language=f"{st.session_state['file_language']}", line_numbers=True)
+
+#Credits
+st.sidebar.markdown("This project was created by [Gustavo Espíndola](https://github.com/gustavoespindola). 🆘 If you have any questions or feedback, please contact in our [Discord](https://discord.gg/mZf5aaYt) or [Github Repo](https://github.com/gustavoespindola/chunkerizer).")
