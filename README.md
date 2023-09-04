@@ -3,6 +3,8 @@ This is a Python application that allows you to split and analyze text files usi
 
 #### [Demo](https://chunkerizer.streamlit.app/)
 
+![Demo](https://github.com/gustavoespindola/chunkerizer/blob/main/demo.gif?raw=true)
+
 ## Features
 - **File Upload**: You can upload a text file of your choice.
 - **Splitting Methods**: Choose from different splitting methods, including:
