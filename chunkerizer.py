@@ -1,22 +1,22 @@
 import streamlit as st
-from io import StringIO
 import re
-# import pandas as pd
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter, Language
 
-# Tokenize
+# Tokenize (OpenAI)
+# This code creates a token encoding object for the CL100K_BASE
+# encoding scheme. The CL100K_BASE encoding scheme is used to encode tokens for the CL100K dataset.
 import tiktoken
 enc = tiktoken.get_encoding("cl100k_base")
 
 import pandas as pd
-import numpy as np
 
+# From https://python.langchain.com/docs/modules/data_connection/document_transformers
 splitters=[
   'Split code',
   'Split by character',
   'Recursively split by character',
-  'Split by tokens (OpenAI)',
+  'Split by tokens (OpenAI)'
 ]
 
 languages=['CPP', 'GO', 'JAVA', 'JS', 'PHP', 'PROTO', 'PYTHON', 'RST', 'RUBY', 'RUST', 'SCALA', 'SWIFT', 'MARKDOWN', 'LATEX', 'HTML', 'SOL']
@@ -34,6 +34,10 @@ files_types=[
     "language": "PHP",
   },
   {
+    "extension": "html",
+    "language": "HTML",
+  },
+  {
     "extension": "js",
     "language": "JS",
   },
@@ -47,33 +51,39 @@ files_types=[
   }
 ]
 
+# Store the file extension in session state
 if 'file_extension' not in st.session_state:
   st.session_state['file_extension'] = ''
+
+# Store the file language in session state
 if 'file_language' not in st.session_state:
   st.session_state['file_language'] = ''
-if 'total_chunks' not in st.session_state:
-  st.session_state['total_chunks'] = 0
+
+# Store the tokenized content in session state
 if 'tokenized_content' not in st.session_state:
   st.session_state['tokenized_content'] = 0
-if 'tokenized_chunks' not in st.session_state:
-  st.session_state['tokenized_chunks'] = 0
+
 
 def file_upload():
   if uploaded_file is not None:
-    st.session_state['file_extension']=uploaded_file.name.split(".")[-1]
+    # Get the file extension and save it in session state
+    st.session_state['file_extension'] = uploaded_file.name.split(".")[-1]
+    # Find the language of the file
     for file in files_types:
-      if file["extension"]==st.session_state['file_extension']:
-        st.session_state['file_language']=file["language"].lower()
+      if file["extension"] == st.session_state['file_extension']:
+        st.session_state['file_language'] = file["language"].lower()
         break
 
     return uploaded_file.getvalue().decode("utf-8")
 
+# Create Top KPI's
 def metrics(chunks, tokens):
   col1, col2 = st.columns(2)
   col1.metric("Chunks", chunks)
-  token_ratio=np.round(tokens/st.session_state['tokenized_content']*1, 2)
+  token_ratio=round(tokens/st.session_state['tokenized_content'], 2)
   col2.metric("Tokens", tokens, token_ratio, delta_color="inverse" if token_ratio!=1 else "off")
 
+# Create dataframe table
 def create_dataframe(text_splitter, file_content):
   chunks=text_splitter.create_documents([file_content])
   st.session_state['tokenized_content']=len(enc.encode(file_content))
@@ -85,7 +95,10 @@ def create_dataframe(text_splitter, file_content):
     }
   )
   metrics(len(df), df['Tokens'].sum())
-  st.dataframe(df, use_container_width=True)
+  if len(df) < 1:
+    st.error('No content found.')
+  else:
+    st.dataframe(df, use_container_width=True)
 #
 # SIDEBAR
 st.sidebar.title("Chunkerize")
