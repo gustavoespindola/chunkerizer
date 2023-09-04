@@ -1,5 +1,8 @@
 # 🦜️✂️ Langchain Text Splitter
 This is a Python application that allows you to split and analyze text files using different methods, including character-based splitting, recursive character-based splitting, and token splitting. It is designed to work with various programming languages and txt.
+```
+Demo https://chunkerizer.streamlit.app/
+```
 
 ## Features
 - **File Upload**: You can upload a text file of your choice.
