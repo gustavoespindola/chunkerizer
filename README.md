@@ -5,6 +5,10 @@ This is a Python application that allows you to split and analyze text files usi
 
 ![Demo](https://github.com/gustavoespindola/chunkerizer/blob/main/demo.gif?raw=true)
 
+## Articles
+- [🦜️✂️ Chunk Division and Overlap: Understanding the Process](https://link.medium.com/R6KmPVbYPCb)
+- [🦜️✂️ Text Splitters: Smart Text Division with Langchain](https://link.medium.com/Ri4WAf9XPCb)
+
 ## Features
 - **File Upload**: You can upload a text file of your choice.
 - **Splitting Methods**: Choose from different splitting methods, including:
